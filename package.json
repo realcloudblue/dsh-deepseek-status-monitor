@@ -1,0 +1,43 @@
+{
+  "name": "dsh-deepseek-status-monitor",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "DeepSeek service status monitor for the DSH Web GUI: a floating status pill, active incidents and maintenance, and a full-screen alert when the service state flips.",
+  "license": "MIT",
+  "author": "无尽云岚",
+  "keywords": [
+    "deepseek",
+    "dsh",
+    "dsh-plugin",
+    "status-page",
+    "monitor",
+    "incident",
+    "health",
+    "web-ui"
+  ],
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  }
+}

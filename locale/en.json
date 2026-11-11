@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "DeepSeek Status Monitor",
+    "description": "A floating top-right monitor for DeepSeek service health, component status and active incidents."
+  }
+}

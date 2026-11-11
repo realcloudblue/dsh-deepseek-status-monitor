@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "DeepSeek 服务状态",
+    "description": "悬浮在客户端右上角，实时监控 DeepSeek 各项服务健康状态与进行中的故障事件。"
+  }
+}
