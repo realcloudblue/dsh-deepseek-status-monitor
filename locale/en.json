@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DeepSeek Status Monitor",
-    "description": "A floating top-right monitor for DeepSeek service health, component status and active incidents."
+    "title": "DeepSeek Status & Usage",
+    "description": "A floating monitor for DeepSeek service health, account balance, peak/off-peak pricing, and locally estimated session-spend TOP3."
   }
 }

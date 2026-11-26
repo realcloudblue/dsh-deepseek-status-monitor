@@ -5,8 +5,11 @@ window.__ModuleLoader__.load({
     const h = React.createElement
     const NS = 'deepseek-status'
     const API_PATH = '/deepseek-status/api'
+    const ACCOUNT_PATH = '/deepseek-status/account'
+    const USAGE_PATH = '/deepseek-status/usage'
     const PAGE_URL = 'https://status.deepseek.com/'
     const POSITION_KEY = 'deepseek-status.position.v1'
+    const PRIVACY_KEY = 'deepseek-status.privacy.v1'
 
     const DICT_EN = {
       'panel.title': 'DeepSeek Status',
@@ -79,6 +82,39 @@ window.__ModuleLoader__.load({
       'debug.partial': 'Partial',
       'debug.outage': 'Outage',
       'debug.recovered': 'Recovered',
+      'account.balance': 'Balance',
+      'account.total': 'Total',
+      'account.recharge': 'Recharge',
+      'account.bonus': 'Bonus',
+      'account.notSignedIn': 'Not signed in',
+      'account.unavailable': 'Unavailable',
+      'account.balanceTitle': 'DeepSeek account balance',
+      'account.apiTitle': 'DeepSeek API key balance',
+      'account.kimiTitle': 'Kimi balance',
+      'account.zhipuTitle': 'Zhipu GLM balance',
+      'account.sourceApi': 'DS API',
+      'account.sourceAccount': 'DS Account',
+      'account.sourceKimi': 'Kimi',
+      'account.sourceZhipu': 'GLM',
+      'period.offpeak': '谷',
+      'period.peak': '峰',
+      'period.offpeakTitle': 'Off-peak pricing period',
+      'period.peakTitle': 'Peak pricing period',
+      'privacy.hide': 'Hide amounts',
+      'privacy.show': 'Show amounts',
+      'usage.title': 'Session spend',
+      'usage.today': 'Today',
+      'usage.total': 'All time',
+      'usage.estimated': 'Estimated',
+      'usage.note': 'Amounts are estimated locally for reference only · Actual billing is on the DeepSeek platform',
+      'usage.help': 'Calculated from local session token usage with DeepSeek public peak/off-peak prices. Actual billing may differ.',
+      'usage.empty': 'No session spend recorded yet.',
+      'usage.building': 'Building the local spend index…',
+      'usage.error': 'Session spend is temporarily unavailable.',
+      'usage.untitled': 'Untitled session',
+      'usage.partial': 'Partially unpriced',
+      'usage.updated': 'Updated',
+      'usage.privacy': '••••',
       'footer.source': 'Source',
       'time.justNow': 'just now',
     }
@@ -154,6 +190,39 @@ window.__ModuleLoader__.load({
       'debug.partial': '部分中断',
       'debug.outage': '中断',
       'debug.recovered': '恢复',
+      'account.balance': '余额',
+      'account.total': '总余额',
+      'account.recharge': '充值余额',
+      'account.bonus': '赠金',
+      'account.notSignedIn': '未登录',
+      'account.unavailable': '不可用',
+      'account.balanceTitle': 'DeepSeek 账户余额',
+      'account.apiTitle': 'DeepSeek API Key 余额',
+      'account.kimiTitle': 'Kimi 余额',
+      'account.zhipuTitle': '智谱 GLM 余额',
+      'account.sourceApi': 'DS API',
+      'account.sourceAccount': 'DS 账户',
+      'account.sourceKimi': 'Kimi',
+      'account.sourceZhipu': '智谱',
+      'period.offpeak': '谷',
+      'period.peak': '峰',
+      'period.offpeakTitle': '谷时计费时段',
+      'period.peakTitle': '峰时计费时段',
+      'privacy.hide': '隐藏金额',
+      'privacy.show': '显示金额',
+      'usage.title': '会话消耗',
+      'usage.today': '今日消耗',
+      'usage.total': '累计消耗',
+      'usage.estimated': '估算',
+      'usage.note': '金额为本地估算，仅供参考 · 实际以平台账单为准',
+      'usage.help': '按本地会话 token 用量与 DeepSeek 公开峰谷单价估算，实际扣费可能有差异。',
+      'usage.empty': '暂无会话消耗记录。',
+      'usage.building': '正在建立本地消费索引…',
+      'usage.error': '暂时无法统计会话消耗。',
+      'usage.untitled': '未命名会话',
+      'usage.partial': '部分未计价',
+      'usage.updated': '更新于',
+      'usage.privacy': '••••',
       'footer.source': '数据来源',
       'time.justNow': '刚刚',
     }
@@ -267,6 +336,15 @@ window.__ModuleLoader__.load({
         { d: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z' },
         { d: 'M12 7.2v5.1l3.1 1.9' },
       ],
+      eye: [
+        { d: 'M2.5 12s3.6-6.2 9.5-6.2S21.5 12 21.5 12s-3.6 6.2-9.5 6.2S2.5 12 2.5 12Z' },
+        { d: 'M12 14.8a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6Z' },
+      ],
+      eyeOff: [
+        { d: 'M2.5 12s3.6-6.2 9.5-6.2S21.5 12 21.5 12s-3.6 6.2-9.5 6.2S2.5 12 2.5 12Z' },
+        { d: 'M12 14.8a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6Z' },
+        { d: 'm3 3 18 18' },
+      ],
     }
 
     const CSS = `
@@ -302,10 +380,11 @@ window.__ModuleLoader__.load({
       .ds-pill {
         display: flex;
         align-items: center;
-        gap: 8px;
-        min-width: 166px;
+        gap: 5px;
+        min-width: 252px;
+        max-width: calc(100vw - 16px);
         height: 43px;
-        padding: 5px 9px 5px 5px;
+        padding: 5px 5px 5px 5px;
         border: 1px solid color-mix(in srgb, var(--ds-tone) 28%, var(--dsw-alias-border-l1));
         border-radius: 999px;
         background: var(--dsw-alias-bg-overlay);
@@ -325,6 +404,120 @@ window.__ModuleLoader__.load({
         user-select: none;
         -webkit-user-select: none;
         transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+      }
+      .ds-pill-main {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        flex: 1;
+        height: 100%;
+        padding: 0 2px 0 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: left;
+        cursor: grab;
+      }
+      .ds-pill-main:focus-visible {
+        outline: 2px solid var(--ds-tone);
+        outline-offset: 2px;
+        border-radius: 999px;
+      }
+      .ds-pill-account {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+        padding-left: 7px;
+        border-left: 1px solid color-mix(in srgb, var(--dsw-alias-border-l1) 82%, transparent);
+        white-space: nowrap;
+      }
+      .ds-period {
+        display: inline-grid;
+        place-items: center;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 3px;
+        border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
+        border-radius: 5px;
+        font-size: 9px;
+        font-weight: 740;
+        line-height: 1;
+      }
+      .ds-period.is-offpeak { color: var(--dsw-alias-state-success-primary); }
+      .ds-period.is-peak { color: var(--dsw-alias-state-error-primary); }
+      .ds-balance {
+        overflow: hidden;
+        min-width: 0;
+        color: var(--dsw-alias-label-primary);
+        font-size: 12.2px;
+        font-weight: 680;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+      }
+      .ds-balance-source {
+        color: var(--dsw-alias-label-secondary);
+        font-size: 8px;
+        font-weight: 640;
+        line-height: 1;
+        opacity: 0.9;
+      }
+      .ds-balance.is-muted {
+        color: var(--dsw-alias-label-secondary);
+        font-size: 10px;
+        font-weight: 560;
+      }
+      .ds-balance.is-masked {
+        letter-spacing: 0.08em;
+        color: var(--dsw-alias-label-secondary);
+      }
+      .ds-eye {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--dsw-alias-label-secondary);
+        cursor: pointer;
+      }
+      .ds-eye:hover { color: var(--dsw-alias-label-primary); background: color-mix(in srgb, var(--dsw-alias-label-primary) 7%, transparent); }
+      .ds-eye:disabled { cursor: default; opacity: 0.45; }
+      .ds-eye:focus-visible {
+        outline: 2px solid var(--ds-tone);
+        outline-offset: 1px;
+      }
+      .ds-amount {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0;
+        min-width: 0;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .ds-amount-static { display: inline-block; }
+      .ds-reel {
+        display: inline-block;
+        height: 1.18em;
+        overflow: hidden;
+        vertical-align: -0.16em;
+      }
+      .ds-reel-track {
+        display: flex;
+        flex-direction: column;
+        transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .ds-reel-digit {
+        height: 1.18em;
+        line-height: 1.18em;
+        text-align: center;
       }
       .ds-pill:hover {
         transform: translateY(-1px);
@@ -429,8 +622,8 @@ window.__ModuleLoader__.load({
         display: flex;
         flex-direction: column;
         width: min(346px, calc(100vw - 20px));
-        max-height: min(calc(100vh - 182px), 650px);
-        max-height: min(calc(100dvh - 182px), 650px);
+        max-height: min(calc(100vh - 120px), 860px);
+        max-height: min(calc(100dvh - 120px), 860px);
         overflow: hidden;
         border: 1px solid var(--dsw-alias-border-l2);
         border-radius: 16px;
@@ -773,6 +966,145 @@ window.__ModuleLoader__.load({
         font-weight: 640;
       }
 
+      .ds-usage {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .ds-usage-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+        color: var(--dsw-alias-label-secondary);
+        font-size: 8.7px;
+        line-height: 1.35;
+      }
+      .ds-usage-note svg { margin-top: 1px; opacity: 0.8; }
+      .ds-usage-card {
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--dsw-alias-border-l1) 80%, transparent);
+        border-radius: 9px;
+        background: color-mix(in srgb, var(--dsw-alias-bg-overlay) 2%, transparent);
+      }
+      .ds-usage-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 6px 8px;
+        border-bottom: 1px solid color-mix(in srgb, var(--dsw-alias-border-l1) 78%, transparent);
+        background: color-mix(in srgb, var(--dsw-alias-bg-overlay) 3%, transparent);
+        color: var(--dsw-alias-label-secondary);
+        font-size: 9.3px;
+        font-weight: 660;
+      }
+      .ds-usage-head strong {
+        color: var(--dsw-alias-label-primary);
+        font-size: 9.8px;
+        font-weight: 720;
+      }
+      .ds-usage-top {
+        font-size: 8.4px;
+        font-weight: 680;
+        letter-spacing: 0.04em;
+        font-variant-numeric: tabular-nums;
+      }
+      .ds-usage-row {
+        display: grid;
+        grid-template-columns: 17px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 8px;
+        border-top: 1px solid color-mix(in srgb, var(--dsw-alias-border-l1) 52%, transparent);
+      }
+      .ds-usage-row:first-of-type { border-top: 0; }
+      .ds-usage-rank {
+        display: grid;
+        place-items: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 5px;
+        background: linear-gradient(145deg, color-mix(in srgb, var(--ds-rank-tone) 20%, transparent), color-mix(in srgb, var(--ds-rank-tone) 8%, transparent));
+        color: var(--ds-rank-tone);
+        font-size: 9px;
+        font-weight: 720;
+        line-height: 1;
+      }
+      .ds-usage-title {
+        overflow: hidden;
+        color: var(--dsw-alias-label-primary);
+        font-size: 10.4px;
+        line-height: 1.3;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ds-usage-amount {
+        color: var(--dsw-alias-label-primary);
+        font-size: 10.4px;
+        font-weight: 640;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.25;
+        white-space: nowrap;
+      }
+      .ds-usage-partial {
+        margin-left: 3px;
+        color: var(--dsw-alias-state-warn-primary);
+        font-size: 8.2px;
+        font-weight: 560;
+      }
+      .ds-usage-empty {
+        padding: 8px;
+        color: var(--dsw-alias-label-secondary);
+        font-size: 9.4px;
+        line-height: 1.4;
+      }
+      .ds-usage-building {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        color: var(--dsw-alias-label-secondary);
+        font-size: 9.4px;
+        line-height: 1.4;
+      }
+      .ds-usage-progress {
+        margin-left: auto;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.75;
+      }
+      .ds-usage-error {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        color: var(--dsw-alias-state-warn-primary);
+        font-size: 9.4px;
+        line-height: 1.4;
+      }
+      .ds-usage-error button {
+        margin-left: auto;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--dsw-alias-brand-primary);
+        font-size: 9.2px;
+        font-weight: 620;
+        cursor: pointer;
+      }
+      .ds-usage-error button:focus-visible {
+        outline: 2px solid var(--dsw-alias-brand-primary);
+        outline-offset: 2px;
+        border-radius: 3px;
+      }
+      .ds-usage-meta {
+        padding: 0 2px;
+        color: var(--dsw-alias-label-secondary);
+        font-size: 8.5px;
+        line-height: 1.3;
+        text-align: right;
+        opacity: 0.8;
+      }
+
       .ds-tools {
         display: flex;
         flex-direction: column;
@@ -981,7 +1313,11 @@ window.__ModuleLoader__.load({
           top: calc(114px + env(safe-area-inset-top, 0px));
           right: calc(8px + env(safe-area-inset-right, 0px));
         }
-        .ds-pill { min-width: 152px; height: 40px; }
+        .ds-pill { min-width: 0; height: 40px; max-width: calc(100vw - 16px); }
+        .ds-pill-brand { display: none; }
+        .ds-pill-copy { min-width: 0; }
+        .ds-balance { font-size: 11px; }
+        .ds-pill-account { padding-left: 5px; }
       }
       @media (prefers-reduced-motion: reduce) {
         .ds-monitor *, .ds-monitor *::before, .ds-monitor *::after {
@@ -1258,6 +1594,348 @@ window.__ModuleLoader__.load({
       }
     }
 
+    function readStoredPrivacy() {
+      try {
+        return window.localStorage.getItem(PRIVACY_KEY) === '1'
+      } catch {
+        return false
+      }
+    }
+
+    function storePrivacy(value) {
+      try {
+        window.localStorage.setItem(PRIVACY_KEY, value ? '1' : '0')
+      } catch {
+        // Privacy still applies for this mount.
+      }
+    }
+
+    function formatMicros(value, currency = 'CNY') {
+      const micros = Math.max(0, Math.round(Number(value) || 0))
+      const symbol = currency === 'USD' ? '$' : '¥'
+      if (micros === 0) return `${symbol}0.00`
+      if (micros < 10_000) return `<${symbol}0.01`
+      const cents = Math.floor(micros / 10_000)
+      const whole = Math.floor(cents / 100)
+      const fraction = String(cents % 100).padStart(2, '0')
+      return `${symbol}${whole.toLocaleString('en-US')}.${fraction}`
+    }
+
+    function useAccountFeed(locale) {
+      const [state, setState] = React.useState({
+        data: null,
+        error: null,
+        initialLoading: true,
+        refreshing: false,
+      })
+      const inFlight = React.useRef(false)
+      const stopped = React.useRef(true)
+      const controllerRef = React.useRef(null)
+      const lastOk = React.useRef(false)
+
+      const load = React.useCallback(
+        (force, manual) => {
+          if (inFlight.current) return Promise.resolve()
+          inFlight.current = true
+          if (manual) setState((current) => ({ ...current, refreshing: true, error: null }))
+          const controller = new AbortController()
+          controllerRef.current = controller
+          const timezoneOffset = -new Date().getTimezoneOffset() * 60
+          const language = locale === 'zh' ? 'zh-CN' : locale || navigator.language || 'zh-CN'
+          const query = new URLSearchParams({
+            locale: language,
+            tz: String(timezoneOffset),
+          })
+          if (force) query.set('refresh', '1')
+          return (async () => {
+            try {
+              const response = await fetch(`${ACCOUNT_PATH}?${query.toString()}`, {
+                headers: { accept: 'application/json' },
+                cache: 'no-store',
+                signal: controller.signal,
+              })
+              if (!response.ok) throw new Error(`http-${response.status}`)
+              const payload = await response.json()
+              if (!payload || payload.ok !== true) throw new Error('invalid-payload')
+              if (stopped.current) return
+              lastOk.current = true
+              setState({ data: payload, error: null, initialLoading: false, refreshing: false })
+            } catch (error) {
+              if (stopped.current || error?.name === 'AbortError') return
+              lastOk.current = false
+              setState((current) => ({
+                ...current,
+                error: 'connect',
+                initialLoading: false,
+                refreshing: false,
+              }))
+            } finally {
+              inFlight.current = false
+              if (controllerRef.current === controller) controllerRef.current = null
+            }
+          })()
+        },
+        [locale],
+      )
+
+      React.useEffect(() => {
+        stopped.current = false
+        let active = true
+        let timer = null
+        const loop = async () => {
+          await load(false, false)
+          if (!active || stopped.current) return
+          timer = window.setTimeout(loop, lastOk.current ? 60_000 : 5_000)
+        }
+        void loop()
+        const onVisibility = () => {
+          if (active && document.visibilityState === 'visible') void load(false, false)
+        }
+        document.addEventListener('visibilitychange', onVisibility)
+        return () => {
+          active = false
+          stopped.current = true
+          if (timer) window.clearTimeout(timer)
+          controllerRef.current?.abort()
+          document.removeEventListener('visibilitychange', onVisibility)
+        }
+      }, [load])
+
+      const refresh = React.useCallback(() => load(true, true), [load])
+      return { ...state, refresh }
+    }
+
+    function useUsageFeed(enabled, currency) {
+      const [state, setState] = React.useState({
+        data: null,
+        error: null,
+        loading: false,
+      })
+      const inFlight = React.useRef(false)
+      const latest = React.useRef(null)
+      const controllerRef = React.useRef(null)
+      const stopped = React.useRef(true)
+      const lastOk = React.useRef(false)
+
+      const load = React.useCallback(
+        (force) => {
+          if (!enabled || inFlight.current) return Promise.resolve()
+          inFlight.current = true
+          setState((current) => ({ ...current, loading: true }))
+          const controller = new AbortController()
+          controllerRef.current = controller
+          const query = new URLSearchParams({ currency: currency === 'USD' ? 'USD' : 'CNY' })
+          if (force) query.set('refresh', '1')
+          return (async () => {
+            try {
+              const response = await fetch(`${USAGE_PATH}?${query.toString()}`, {
+                headers: { accept: 'application/json' },
+                cache: 'no-store',
+                signal: controller.signal,
+              })
+              if (!response.ok) throw new Error(`http-${response.status}`)
+              const payload = await response.json()
+              if (!payload || payload.ok !== true) throw new Error('invalid-payload')
+              if (stopped.current) return
+              latest.current = payload
+              lastOk.current = true
+              setState({ data: payload, error: null, loading: false })
+            } catch (error) {
+              if (stopped.current || error?.name === 'AbortError') return
+              lastOk.current = false
+              setState((current) => ({ ...current, error: 'connect', loading: false }))
+            } finally {
+              inFlight.current = false
+              if (controllerRef.current === controller) controllerRef.current = null
+            }
+          })()
+        },
+        [enabled, currency],
+      )
+
+      React.useEffect(() => {
+        if (!enabled) {
+          controllerRef.current?.abort()
+          return undefined
+        }
+        stopped.current = false
+        let active = true
+        let timer = null
+        const loop = async () => {
+          await load(false)
+          if (!active || stopped.current) return
+          const data = latest.current
+          const delay = data?.building || data?.refreshing ? 1_800 : lastOk.current ? 60_000 : 5_000
+          timer = window.setTimeout(loop, delay)
+        }
+        void loop()
+        const onVisibility = () => {
+          if (active && document.visibilityState === 'visible') void load(false)
+        }
+        document.addEventListener('visibilitychange', onVisibility)
+        return () => {
+          active = false
+          stopped.current = true
+          if (timer) window.clearTimeout(timer)
+          controllerRef.current?.abort()
+          document.removeEventListener('visibilitychange', onVisibility)
+        }
+      }, [enabled, load])
+
+      const refresh = React.useCallback(() => load(true), [load])
+      return { ...state, refresh }
+    }
+
+    function RollingAmount({ text, className = '' }) {
+      const chars = Array.from(String(text || ''))
+      return h(
+        'span',
+        { className: `ds-amount ${className}`.trim() },
+        chars.map((char, index) => {
+          if (!/\d/.test(char)) {
+            return h('span', { key: index, className: 'ds-amount-static' }, char)
+          }
+          const digit = Number(char)
+          return h(
+            'span',
+            { key: index, className: 'ds-reel' },
+            h(
+              'span',
+              {
+                className: 'ds-reel-track',
+                style: { transform: `translateY(-${digit * 1.18}em)` },
+              },
+              Array.from({ length: 10 }, (_, value) =>
+                h('span', { key: value, className: 'ds-reel-digit' }, String(value)),
+              ),
+            ),
+          )
+        }),
+      )
+    }
+
+    const USAGE_RANK_TONES = ['#b45309', '#d97706', '#f59e0b']
+
+    function UsageCard({ t, title, rows, locale, privacy, currency }) {
+      return h(
+        'div',
+        { className: 'ds-usage-card' },
+        h(
+          'div',
+          { className: 'ds-usage-head' },
+          h('strong', null, title),
+          h('span', { className: 'ds-usage-top' }, 'TOP3'),
+        ),
+        rows.length
+          ? rows.map((row, index) =>
+              h(
+                'div',
+                {
+                  className: 'ds-usage-row',
+                  key: row.id,
+                  style: { '--ds-rank-tone': USAGE_RANK_TONES[index] || USAGE_RANK_TONES[2] },
+                },
+                h('span', { className: 'ds-usage-rank' }, index + 1),
+                h(
+                  'span',
+                  {
+                    className: 'ds-usage-title',
+                    title: row.title || t('usage.untitled'),
+                  },
+                  row.title || t('usage.untitled'),
+                ),
+                h(
+                  'span',
+                  { className: 'ds-usage-amount' },
+                  privacy ? t('usage.privacy') : formatMicros(row.amountMicros, currency),
+                  row.partial
+                    ? h('span', { className: 'ds-usage-partial' }, t('usage.partial'))
+                    : null,
+                ),
+              ),
+            )
+          : h('div', { className: 'ds-usage-empty' }, t('usage.empty')),
+      )
+    }
+
+    function UsageSection({ t, locale, data, error, privacy, onRefresh }) {
+      const building = Boolean(data?.building || data?.refreshing)
+      const hasAny = Boolean(data?.today?.length || data?.total?.length)
+      const updated = data?.fetchedAt ? formatTime(data.fetchedAt, locale) : ''
+      return h(
+        'div',
+        { className: 'ds-section ds-usage' },
+        h(
+          'div',
+          { className: 'ds-section-head' },
+          h('span', null, t('usage.title')),
+          h('span', { className: 'ds-section-count' }, t('usage.estimated')),
+        ),
+        h(
+          'div',
+          { className: 'ds-usage-note', title: t('usage.help') },
+          h(Icon, { name: 'question', size: 11 }),
+          h('span', null, t('usage.note')),
+        ),
+        building && !hasAny
+          ? h(
+              'div',
+              { className: 'ds-usage-building' },
+              h('span', { className: 'ds-loading-beacon', 'aria-hidden': 'true' }),
+              h('span', null, t('usage.building')),
+              data?.progress?.total
+                ? h(
+                    'span',
+                    { className: 'ds-usage-progress' },
+                    `${data.progress.done}/${data.progress.total}`,
+                  )
+                : null,
+            )
+          : null,
+        error && !hasAny
+          ? h(
+              'div',
+              { className: 'ds-usage-error' },
+              h(Icon, { name: 'alert', size: 12 }),
+              h('span', null, t('usage.error')),
+              h('button', { type: 'button', onClick: onRefresh }, t('action.retry')),
+            )
+          : null,
+        hasAny
+          ? h(
+              React.Fragment,
+              null,
+              h(UsageCard, {
+                t,
+                title: t('usage.today'),
+                rows: data.today || [],
+                locale,
+                privacy,
+                currency: data.currency,
+              }),
+              h(UsageCard, {
+                t,
+                title: t('usage.total'),
+                rows: data.total || [],
+                locale,
+                privacy,
+                currency: data.currency,
+              }),
+            )
+          : null,
+        !building && !error && !hasAny
+          ? h(
+              'div',
+              { className: 'ds-usage-card' },
+              h('div', { className: 'ds-usage-empty' }, t('usage.empty')),
+            )
+          : null,
+        updated
+          ? h('div', { className: 'ds-usage-meta' }, `${t('usage.updated')} ${updated}`)
+          : null,
+      )
+    }
+
     function StatusPill({
       t,
       locale,
@@ -1266,6 +1944,9 @@ window.__ModuleLoader__.load({
       stale,
       open,
       dragging,
+      account,
+      privacy,
+      onTogglePrivacy,
       onToggle,
       buttonRef,
       onPointerDown,
@@ -1282,18 +1963,49 @@ window.__ModuleLoader__.load({
         .filter(Boolean)
         .join(' · ')
       const actionLabel = open ? t('action.collapse') : t('action.expand')
+      const accountData = account?.data
+      const balance = accountData?.balance
+      const available = accountData?.available !== false
+      const signedIn = accountData?.signedIn
+      const hasBalance = Number.isFinite(balance?.totalMicros)
+      const currency = accountData?.currency || 'CNY'
+      const period = accountData?.period
+      const source = ['deepseek-api', 'deepseek-account', 'kimi', 'zhipu'].includes(accountData?.source)
+        ? accountData.source
+        : 'deepseek-account'
+      const sourceLabel =
+        source === 'kimi'
+          ? t('account.sourceKimi')
+          : source === 'zhipu'
+            ? t('account.sourceZhipu')
+            : source === 'deepseek-api'
+              ? t('account.sourceApi')
+              : t('account.sourceAccount')
+      const balanceTitle =
+        source === 'kimi'
+          ? t('account.kimiTitle')
+          : source === 'zhipu'
+            ? t('account.zhipuTitle')
+            : source === 'deepseek-api'
+              ? t('account.apiTitle')
+              : t('account.balanceTitle')
+      const accountUnavailable = account?.error || accountData?.error
+      const balanceText = privacy && hasBalance ? t('usage.privacy') : hasBalance ? formatMicros(balance.totalMicros, currency) : ''
+      const balanceDetail = hasBalance
+        ? `${balanceTitle} · ${t('account.total')} ${formatMicros(balance.totalMicros, currency)} · ${t('account.recharge')} ${formatMicros(balance.rechargeMicros, currency)} · ${t('account.bonus')} ${formatMicros(balance.bonusMicros, currency)}`
+        : ''
+      let accountText = ''
+      if (!available) accountText = t('account.unavailable')
+      else if (signedIn === false) accountText = t('account.notSignedIn')
+      else if (hasBalance) accountText = balanceText
+      else if (accountUnavailable) accountText = t('account.unavailable')
+      else accountText = '—'
+      const accountMuted = !hasBalance
 
       return h(
-        'button',
+        'div',
         {
-          ref: buttonRef,
-          type: 'button',
           className: `ds-pill${dragging ? ' is-dragging' : ''}`,
-          title,
-          draggable: false,
-          'aria-expanded': open,
-          'aria-controls': 'deepseek-status-panel',
-          'aria-label': `${actionLabel}: ${statusLabel}`,
           onClick: onToggle,
           onPointerDown,
           onPointerMove,
@@ -1301,24 +2013,90 @@ window.__ModuleLoader__.load({
           onPointerCancel,
           onLostPointerCapture,
         },
-        h('span', { className: 'ds-mark', 'aria-hidden': 'true' }, h(Icon, { name: 'pulse', size: 16, strokeWidth: 2 })),
         h(
-          'span',
-          { className: 'ds-pill-copy' },
-          h('span', { className: 'ds-pill-brand' }, t('pill.brand')),
+          'button',
+          {
+            ref: buttonRef,
+            type: 'button',
+            className: 'ds-pill-main',
+            title,
+            draggable: false,
+            'aria-expanded': open,
+            'aria-controls': 'deepseek-status-panel',
+            'aria-label': [
+              actionLabel,
+              statusLabel,
+              hasBalance && !privacy ? `${t('account.balance')} ${formatMicros(balance.totalMicros, currency)} ${sourceLabel}` : '',
+              hasBalance && privacy ? t('privacy.hide') : '',
+            ]
+              .filter(Boolean)
+              .join(' · '),
+          },
+          h('span', { className: 'ds-mark', 'aria-hidden': 'true' }, h(Icon, { name: 'pulse', size: 16, strokeWidth: 2 })),
           h(
             'span',
-            { className: 'ds-pill-status', 'aria-live': 'polite' },
-            h('span', { className: 'ds-dot', 'aria-hidden': 'true' }),
-            statusLabel,
+            { className: 'ds-pill-copy' },
+            h('span', { className: 'ds-pill-brand' }, t('pill.brand')),
+            h(
+              'span',
+              { className: 'ds-pill-status', 'aria-live': 'polite' },
+              h('span', { className: 'ds-dot', 'aria-hidden': 'true' }),
+              statusLabel,
+            ),
           ),
+          h(
+            'span',
+            {
+              className: 'ds-pill-account',
+              title: hasBalance ? (privacy ? t('privacy.hide') : balanceDetail) : balanceTitle,
+            },
+            period
+              ? h(
+                  'span',
+                  {
+                    className: `ds-period is-${period}`,
+                    title: period === 'peak' ? t('period.peakTitle') : t('period.offpeakTitle'),
+                  },
+                  t(period === 'peak' ? 'period.peak' : 'period.offpeak'),
+                )
+              : null,
+            hasBalance && !accountMuted ? (
+              privacy
+                ? h('span', { className: 'ds-balance is-masked' }, t('usage.privacy'))
+                : h(RollingAmount, { text: formatMicros(balance.totalMicros, currency), className: 'ds-balance' })
+            ) : h(
+                'span',
+                { className: 'ds-balance is-muted' },
+                account.initialLoading && !accountUnavailable ? '—' : accountText,
+              ),
+            hasBalance
+              ? h('span', { className: 'ds-balance-source', title: balanceTitle }, sourceLabel)
+              : null,
+          ),
+          stale ? h('span', { className: 'ds-pill-warn', title: t('stale.title') }, h(Icon, { name: 'alert', size: 12 })) : null,
+          h(Icon, {
+            name: 'chevron',
+            size: 14,
+            className: `ds-chevron${open ? ' is-open' : ''}`,
+          }),
         ),
-        stale ? h('span', { className: 'ds-pill-warn', title: t('stale.title') }, h(Icon, { name: 'alert', size: 12 })) : null,
-        h(Icon, {
-          name: 'chevron',
-          size: 14,
-          className: `ds-chevron${open ? ' is-open' : ''}`,
-        }),
+        h(
+          'button',
+          {
+            type: 'button',
+            className: 'ds-eye',
+            disabled: !hasBalance,
+            title: privacy ? t('privacy.show') : t('privacy.hide'),
+            'aria-label': privacy ? t('privacy.show') : t('privacy.hide'),
+            'aria-pressed': privacy,
+            onPointerDown: (event) => event.stopPropagation(),
+            onClick: (event) => {
+              event.stopPropagation()
+              onTogglePrivacy()
+            },
+          },
+          h(Icon, { name: privacy ? 'eyeOff' : 'eye', size: 14 }),
+        ),
       )
     }
 
@@ -1474,7 +2252,7 @@ window.__ModuleLoader__.load({
       )
     }
 
-    function Panel({ t, locale, data, error, status, stale, refreshing, onRefresh, onClose, onPlayBurst }) {
+    function Panel({ t, locale, data, error, status, stale, refreshing, usage, privacy, onRefresh, onClose, onPlayBurst }) {
       const hasData = Boolean(data?.fetchedAt)
       const loading = !hasData && !error
       const failed = !hasData && Boolean(error)
@@ -1611,6 +2389,14 @@ window.__ModuleLoader__.load({
                     : null,
                   h(ComponentGroups, { t, data, locale }),
                 ),
+          h(UsageSection, {
+            t,
+            locale,
+            data: usage?.data || null,
+            error: usage?.error || null,
+            privacy,
+            onRefresh,
+          }),
           h(StatusTools, { t, onPlayBurst }),
         ),
         h(
@@ -1634,10 +2420,14 @@ window.__ModuleLoader__.load({
 
     function Monitor({ t, locale }) {
       const feed = useStatusFeed()
+      const account = useAccountFeed(locale)
       const [open, setOpen] = React.useState(false)
       const [position, setPosition] = React.useState(readStoredPosition)
       const [dragging, setDragging] = React.useState(false)
       const [burst, setBurst] = React.useState(null)
+      const [privacy, setPrivacy] = React.useState(readStoredPrivacy)
+      const currency = account.data?.currency || 'CNY'
+      const usage = useUsageFeed(open, 'CNY')
       const rootRef = React.useRef(null)
       const buttonRef = React.useRef(null)
       const positionRef = React.useRef(position)
@@ -1835,6 +2625,16 @@ window.__ModuleLoader__.load({
 
       const refresh = () => {
         if (!feed.refreshing) void feed.refresh()
+        void account.refresh()
+        if (open) void usage.refresh()
+      }
+
+      const togglePrivacy = () => {
+        setPrivacy((current) => {
+          const next = !current
+          storePrivacy(next)
+          return next
+        })
       }
 
       const playBurst = (tone) => {
@@ -1874,6 +2674,9 @@ window.__ModuleLoader__.load({
           stale: stale && Boolean(data?.fetchedAt),
           open,
           dragging,
+          account,
+          privacy,
+          onTogglePrivacy: togglePrivacy,
           onToggle: toggle,
           buttonRef,
           onPointerDown: handlePointerDown,
@@ -1890,7 +2693,9 @@ window.__ModuleLoader__.load({
               error,
               status,
               stale,
-              refreshing: feed.refreshing,
+              refreshing: feed.refreshing || account.refreshing || usage.loading || Boolean(usage.data?.refreshing),
+              usage,
+              privacy,
               onRefresh: refresh,
               onPlayBurst: playBurst,
               onClose: () => {
@@ -1926,7 +2731,7 @@ window.__ModuleLoader__.load({
             {
               name: 'shell.overlay',
               id: 'deepseek-status',
-              order: 102,
+              order: 113,
               label: () => t('panel.title'),
             },
             OverlayEntry,

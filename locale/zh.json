@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "DeepSeek 服务状态",
-    "description": "悬浮在客户端右上角，实时监控 DeepSeek 各项服务健康状态与进行中的故障事件。"
+    "title": "DeepSeek 服务状态与用量",
+    "description": "悬浮在客户端右上角，监控 DeepSeek 服务健康状态，并显示账户余额、峰谷时段与本地估算的会话消耗 TOP3。"
   }
 }

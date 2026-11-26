@@ -1,16 +1,25 @@
 {
   "name": "dsh-deepseek-status-monitor",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
-  "description": "DeepSeek service status monitor for the DSH Web GUI: a floating status pill, active incidents and maintenance, and a full-screen alert when the service state flips.",
+  "description": "DeepSeek status monitor with account balance, peak/off-peak pricing, privacy mode, and locally estimated session-spend TOP3 for the DSH Web GUI.",
   "license": "MIT",
   "author": "无尽云岚",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realcloudblue/dsh-deepseek-status-monitor.git"
+  },
+  "homepage": "https://github.com/realcloudblue/dsh-deepseek-status-monitor#readme",
   "keywords": [
     "deepseek",
     "dsh",
     "dsh-plugin",
     "status-page",
     "monitor",
+    "balance",
+    "session-spend",
+    "usage",
+    "privacy",
     "incident",
     "health",
     "web-ui"
@@ -28,6 +37,7 @@
     "locale/*.json",
     "icon.svg",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE"
   ],
   "dsh": {
